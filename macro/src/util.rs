@@ -13,7 +13,7 @@ pub fn impl_OaSchema_schema(fields: &[Field], docstring: Option<String>) -> Toke
         if let syn::Member::Unnamed(_) = field.member {
             let ty = field.ty;
             return quote! {
-                <#ty as OaSchema>::schema()
+                <#ty as ::oasgen::OaSchema>::schema()
             };
         }
     }
