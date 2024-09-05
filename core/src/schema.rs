@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap};
 
 use openapiv3 as oa;
 use openapiv3::{ReferenceOr, Schema};
@@ -152,6 +152,19 @@ impl<T, E> OaSchema for Result<T, E>
 }
 
 impl<K, V> OaSchema for HashMap<K, V>
+    where
+        V: OaSchema,
+{
+    fn schema_ref() -> ReferenceOr<Schema> {
+        ReferenceOr::Item(Schema::new_map(V::schema_ref()))
+    }
+
+    fn schema() -> Schema {
+        Schema::new_map(V::schema())
+    }
+}
+
+impl<K, V> OaSchema for BTreeMap<K, V>
     where
         V: OaSchema,
 {
